@@ -21,10 +21,8 @@ alt="GMIT Logo" width="500" height="200"/>
 
 # Distributed Banking System
 
-A Distributed Banking System made up of several micro-services communicating via Kafka.
-The system processes customer card transactions and identifies suspicious transactions so that customers can be
-notified. Transactions are identified as being suspicious if the location of the transaction is different from the
-customer's location.
+A distributed banking system built with Java and Apache Kafka, comprising multiple microservices that process card transactions and detect suspicious activity based on location mismatches. 
+Includes services for transaction validation, customer notifications, account management, and reporting, all communicating through Kafka topics with a fault-tolerant multi-broker cluster. 
 
 ***
 View the Project's Wiki [here](https://github.com/johnshields/Kafka-Distributed-Banking-System/wiki).
