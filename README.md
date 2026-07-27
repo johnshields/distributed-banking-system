@@ -1,9 +1,6 @@
-<h1 align="center">Distributed Systems</h1>
+# Distributed Systems
 
-<a href="https://www.gmit.ie/" >
-<p align="center"><img src="https://i.ibb.co/f1ZQSkt/logo-gmit.png"
-alt="GMIT Logo" width="500" height="200"/>
-</p></a>
+[![GMIT Logo](https://i.ibb.co/f1ZQSkt/logo-gmit.png)](https://www.gmit.ie/)
 
 ## Project Details
 | **Project Title** | Kafka Project: Distributed Banking System |
