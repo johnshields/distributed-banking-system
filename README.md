@@ -12,17 +12,10 @@
 | **Module Lecturer**     | John French |
 | **Grade Achieved**     | 73% |
 
-***
-
-<!-- ## Kafka Project: Distributed Banking System -->
-
 # Distributed Banking System
 
 A distributed banking system built with Java and Apache Kafka, comprising multiple microservices that process card transactions and detect suspicious activity based on location mismatches. 
 Includes services for transaction validation, customer notifications, account management, and reporting, all communicating through Kafka topics with a fault-tolerant multi-broker cluster. 
 
-***
 View the Project's Wiki [here](https://github.com/johnshields/Kafka-Distributed-Banking-System/wiki).
-***
 
-#### END OF README
