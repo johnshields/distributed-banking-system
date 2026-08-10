@@ -64,7 +64,7 @@ public class Application {
         return new KafkaConsumer<>(properties);
     }
 
-    private static void recordTransactionForReporting(String topic, Transaction transaction) {
+    static void recordTransactionForReporting(String topic, Transaction transaction) {
         if (topic.equalsIgnoreCase(KafkaTopics.VALID_TRANSACTIONS)) {
             logger.info("valid transaction from {}", transaction);
         } else if (topic.equalsIgnoreCase(KafkaTopics.SUSPICIOUS_TRANSACTIONS)) {

@@ -23,7 +23,7 @@ Fault-tolerant, scalable cluster:
 - `suspicious-transactions`: 2 partitions, replication factor 3
 - `high-value-transactions`
 
-![Kafka Cluster Setup](.assets/screen-grabs/kafka_cluster_setup.png)
+![Kafka Cluster Setup](.assets/kafka_cluster_setup.png)
 
 ## Running the Project
 
