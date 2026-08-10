@@ -21,3 +21,10 @@ jobs:
 
       - name: Build and test
         run: mvn -B clean package
+
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: '**/target/surefire-reports/'
