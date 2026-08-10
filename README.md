@@ -1,7 +1,5 @@
 # Distributed Banking System
 
-[![CI](https://github.com/johnshields/distributed-banking-system/actions/workflows/ci.yml/badge.svg)](https://github.com/johnshields/distributed-banking-system/actions/workflows/ci.yml)
-
 A distributed banking system built with Java and Apache Kafka, comprising multiple microservices that process card transactions and detect suspicious activity based on location mismatches.
 Includes services for transaction validation, customer notifications, account management, and reporting, all communicating through Kafka topics with a fault-tolerant multi-broker cluster.
 
