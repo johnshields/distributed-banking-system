@@ -1,3 +1,7 @@
+package distributed.systems.banking.bankapi;
+
+import distributed.systems.banking.common.Transaction;
+
 import java.io.InputStream;
 import java.util.*;
 

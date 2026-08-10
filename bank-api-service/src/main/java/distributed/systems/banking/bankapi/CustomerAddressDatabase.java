@@ -1,3 +1,5 @@
+package distributed.systems.banking.bankapi;
+
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;

@@ -1,3 +1,6 @@
+package distributed.systems.banking.bankapi;
+
+import distributed.systems.banking.common.Transaction;
 import org.apache.kafka.clients.producer.MockProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -15,15 +18,16 @@ class ApplicationTest {
 
     private static final String SUSPICIOUS_TRANSACTIONS_TOPIC = "suspicious-transactions";
     private static final String VALID_TRANSACTIONS_TOPIC = "valid-transactions";
+    private static final String HIGH_VALUE_TRANSACTIONS_TOPIC = "high-value-transactions";
     private IncomingTransactionsReader transactionsReader;
     private CustomerAddressDatabase userDb;
-    private MockProducer mockProducer;
+    private MockProducer<String, Transaction> mockProducer;
 
     @BeforeEach
     private void setup() {
         transactionsReader = new IncomingTransactionsReader("test-transactions.txt");
         userDb = new CustomerAddressDatabase("test-user-residence.txt");
-        mockProducer = new MockProducer<>(true, new StringSerializer(), new Transaction.TransactionSerializer());
+        mockProducer = new MockProducer<>(true, null, new StringSerializer(), new Transaction.TransactionSerializer());
     }
 
 
@@ -32,7 +36,8 @@ class ApplicationTest {
         Application testApp = new Application();
         testApp.processTransactions(transactionsReader, userDb, mockProducer);
 
-        assertEquals(5, mockProducer.history().size());
+        // 5 input transactions, plus 1 extra send for dkelly9283 which is both high-value and suspicious
+        assertEquals(6, mockProducer.history().size());
     }
 
 
@@ -49,11 +54,23 @@ class ApplicationTest {
 
 
     @Test
+    public void testHighValueTransactionsTopic() throws ExecutionException, InterruptedException {
+        Application testApp = new Application();
+        testApp.processTransactions(transactionsReader, userDb, mockProducer);
+
+        ProducerRecord<String, Transaction> record =
+                (ProducerRecord<String, Transaction>) mockProducer.history().get(1);
+
+        assertEquals(HIGH_VALUE_TRANSACTIONS_TOPIC, record.topic());
+    }
+
+
+    @Test
     public void testSuspiciousTransactionsTopic() throws ExecutionException, InterruptedException {
         Application testApp = new Application();
         testApp.processTransactions(transactionsReader, userDb, mockProducer);
 
-        ProducerRecord<Long, String> record = (ProducerRecord<Long, String>) mockProducer.history().get(1);
+        ProducerRecord<String, Transaction> record = (ProducerRecord<String, Transaction>) mockProducer.history().get(2);
 
         assertEquals(SUSPICIOUS_TRANSACTIONS_TOPIC, record.topic());
     }
