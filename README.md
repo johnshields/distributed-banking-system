@@ -44,16 +44,16 @@ Brings up a 3-broker cluster (ports 9092, 9093, 9094) and creates `valid-transac
 ### 2. Build the services
 
 ```bash
-./build.sh
+./scripts/build.sh
 ```
 
 ### 3. Start the services
 
 ```bash
-./start-bank-service.sh
-./start-account-service.sh
-./start-user-service.sh
-./start-reporting-service.sh
+./scripts/start-bank-service.sh
+./scripts/start-account-service.sh
+./scripts/start-user-service.sh
+./scripts/start-reporting-service.sh
 ```
 
 `bank-api-service` reads transactions from `user-transactions.txt` and produces to Kafka; the other three consume and print what they receive.
