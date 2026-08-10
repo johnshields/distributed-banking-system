@@ -1,5 +1,7 @@
 # Distributed Banking System
 
+[![CI](https://github.com/johnshields/distributed-banking-system/actions/workflows/ci.yml/badge.svg)](https://github.com/johnshields/distributed-banking-system/actions/workflows/ci.yml)
+
 A distributed banking system built with Java and Apache Kafka, comprising multiple microservices that process card transactions and detect suspicious activity based on location mismatches.
 Includes services for transaction validation, customer notifications, account management, and reporting, all communicating through Kafka topics with a fault-tolerant multi-broker cluster.
 
@@ -27,10 +29,12 @@ Fault-tolerant, scalable cluster:
 
 ## Running the Project
 
-### Prerequisites
+### Stack
 
-- Java 12+
-- Maven
+- Java 21+, Maven multi-module reactor
+- Apache Kafka clients 4.3.0
+- SLF4J + Logback
+- JUnit 5 + Mockito
 - Docker
 
 ### 1. Start the Kafka cluster
