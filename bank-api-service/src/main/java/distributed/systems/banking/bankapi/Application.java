@@ -78,6 +78,11 @@ public class Application {
     }
 
     public static Producer<String, Transaction> createKafkaProducer(String bootstrapServers) {
+        logger.info("Transaction producer");
+        return new KafkaProducer<>(buildProducerProperties(bootstrapServers));
+    }
+
+    static Properties buildProducerProperties(String bootstrapServers) {
         Properties properties = new Properties();
 
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -85,8 +90,7 @@ public class Application {
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, Transaction.TransactionSerializer.class.getName());
 
-        logger.info("Transaction producer");
-        return new KafkaProducer<>(properties);
+        return properties;
     }
 
 }

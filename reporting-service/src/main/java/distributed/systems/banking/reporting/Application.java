@@ -52,6 +52,11 @@ public class Application {
     }
 
     public static Consumer<String, Transaction> createKafkaConsumer(String bootstrapServers, String consumerGroup) {
+        logger.info("Transaction consumer");
+        return new KafkaConsumer<>(buildConsumerProperties(bootstrapServers, consumerGroup));
+    }
+
+    static Properties buildConsumerProperties(String bootstrapServers, String consumerGroup) {
         Properties properties = new Properties();
 
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -60,8 +65,7 @@ public class Application {
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, consumerGroup);
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
 
-        logger.info("Transaction consumer");
-        return new KafkaConsumer<>(properties);
+        return properties;
     }
 
     static void recordTransactionForReporting(String topic, Transaction transaction) {

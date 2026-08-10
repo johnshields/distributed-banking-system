@@ -3,6 +3,7 @@ package distributed.systems.banking.bankapi;
 import distributed.systems.banking.common.KafkaTopics;
 import distributed.systems.banking.common.Transaction;
 import org.apache.kafka.clients.producer.MockProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,5 +90,15 @@ class ApplicationTest {
 
         assertEquals(expectedTransaction.getUser(), record.key());
         assertEquals(expectedTransaction, record.value());
+    }
+
+    @Test
+    void buildProducerPropertiesSetsExpectedConfig() {
+        Properties properties = Application.buildProducerProperties("localhost:9092");
+
+        assertEquals("localhost:9092", properties.get(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG));
+        assertEquals("transaction-producer", properties.get(ProducerConfig.CLIENT_ID_CONFIG));
+        assertEquals(StringSerializer.class.getName(), properties.get(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG));
+        assertEquals(Transaction.TransactionSerializer.class.getName(), properties.get(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG));
     }
 }
