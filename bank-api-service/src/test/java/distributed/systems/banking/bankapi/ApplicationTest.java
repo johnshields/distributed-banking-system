@@ -1,5 +1,6 @@
 package distributed.systems.banking.bankapi;
 
+import distributed.systems.banking.common.KafkaTopics;
 import distributed.systems.banking.common.Transaction;
 import org.apache.kafka.clients.producer.MockProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -16,9 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class ApplicationTest {
 
-    private static final String SUSPICIOUS_TRANSACTIONS_TOPIC = "suspicious-transactions";
-    private static final String VALID_TRANSACTIONS_TOPIC = "valid-transactions";
-    private static final String HIGH_VALUE_TRANSACTIONS_TOPIC = "high-value-transactions";
     private IncomingTransactionsReader transactionsReader;
     private CustomerAddressDatabase userDb;
     private MockProducer<String, Transaction> mockProducer;
@@ -49,7 +47,7 @@ class ApplicationTest {
         ProducerRecord<String, Transaction> record =
                 (ProducerRecord<String, Transaction>) mockProducer.history().get(0);
 
-        assertEquals(VALID_TRANSACTIONS_TOPIC, record.topic());
+        assertEquals(KafkaTopics.VALID_TRANSACTIONS, record.topic());
     }
 
 
@@ -61,7 +59,7 @@ class ApplicationTest {
         ProducerRecord<String, Transaction> record =
                 (ProducerRecord<String, Transaction>) mockProducer.history().get(1);
 
-        assertEquals(HIGH_VALUE_TRANSACTIONS_TOPIC, record.topic());
+        assertEquals(KafkaTopics.HIGH_VALUE_TRANSACTIONS, record.topic());
     }
 
 
@@ -72,7 +70,7 @@ class ApplicationTest {
 
         ProducerRecord<String, Transaction> record = (ProducerRecord<String, Transaction>) mockProducer.history().get(2);
 
-        assertEquals(SUSPICIOUS_TRANSACTIONS_TOPIC, record.topic());
+        assertEquals(KafkaTopics.SUSPICIOUS_TRANSACTIONS, record.topic());
     }
 
     @Test

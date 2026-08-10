@@ -1,5 +1,7 @@
 package distributed.systems.banking.reporting;
 
+import distributed.systems.banking.common.KafkaConfig;
+import distributed.systems.banking.common.KafkaTopics;
 import distributed.systems.banking.common.Transaction;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -18,8 +20,8 @@ public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
     // using an array list so the size of the array cannot be modified
-    public static final List<String> TOPICS = new ArrayList<>(Arrays.asList("high-value-transactions", "valid-transactions", "suspicious-transactions"));
-    private static final String BOOTSTRAP_SERVERS = "localhost:9092, localhost:9093, localhost:9094";
+    public static final List<String> TOPICS = new ArrayList<>(Arrays.asList(
+            KafkaTopics.HIGH_VALUE_TRANSACTIONS, KafkaTopics.VALID_TRANSACTIONS, KafkaTopics.SUSPICIOUS_TRANSACTIONS));
 
     public static void main(String[] args) {
         String consumerGroup = "transactions-group";
@@ -28,7 +30,7 @@ public class Application {
         }
 
         logger.info("Consumer is part of consumer group {}", consumerGroup);
-        Consumer<String, Transaction> kafkaConsumer = createKafkaConsumer(BOOTSTRAP_SERVERS, consumerGroup);
+        Consumer<String, Transaction> kafkaConsumer = createKafkaConsumer(KafkaConfig.BOOTSTRAP_SERVERS, consumerGroup);
         consumeMessages(TOPICS, kafkaConsumer);
     }
 
@@ -63,11 +65,11 @@ public class Application {
     }
 
     private static void recordTransactionForReporting(String topic, Transaction transaction) {
-        if (topic.equalsIgnoreCase("valid-transactions")) {
+        if (topic.equalsIgnoreCase(KafkaTopics.VALID_TRANSACTIONS)) {
             logger.info("valid transaction from {}", transaction);
-        } else if (topic.equalsIgnoreCase("suspicious-transactions")) {
+        } else if (topic.equalsIgnoreCase(KafkaTopics.SUSPICIOUS_TRANSACTIONS)) {
             logger.info("suspicious transaction from {}", transaction);
-        } else if (topic.equalsIgnoreCase("high-value-transactions")) {
+        } else if (topic.equalsIgnoreCase(KafkaTopics.HIGH_VALUE_TRANSACTIONS)) {
             logger.info("high value transaction from {}", transaction);
         }
     }

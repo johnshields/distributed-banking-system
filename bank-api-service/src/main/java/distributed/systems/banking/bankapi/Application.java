@@ -1,5 +1,7 @@
 package distributed.systems.banking.bankapi;
 
+import distributed.systems.banking.common.KafkaConfig;
+import distributed.systems.banking.common.KafkaTopics;
 import distributed.systems.banking.common.Transaction;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -17,15 +19,10 @@ public class Application {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
-    // suspicious-transactions with 2 partitions + replication factor of 3
-    private static final String ST_TOPIC = "suspicious-transactions";
-    // valid-transactions with 3 partitions + replication factor of 3
-    private static final String VT_TOPIC = "valid-transactions";
-    private static final String HVT_TOPIC = "high-value-transactions";
-    private static final String BOOTSTRAP_SERVERS = "localhost:9092, localhost:9093, localhost:9094";
+    private static final double HIGH_VALUE_THRESHOLD = 1000;
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        Producer<String, Transaction> kafkaProducer = createKafkaProducer(BOOTSTRAP_SERVERS);
+        Producer<String, Transaction> kafkaProducer = createKafkaProducer(KafkaConfig.BOOTSTRAP_SERVERS);
 
         IncomingTransactionsReader user = new IncomingTransactionsReader();
         CustomerAddressDatabase transactionLocation = new CustomerAddressDatabase();
@@ -50,9 +47,9 @@ public class Application {
             String id = transaction.getUser();
 
             // high value transactions
-            if (transaction.getAmount() > 1000) {
+            if (transaction.getAmount() > HIGH_VALUE_THRESHOLD) {
                 ProducerRecord<String, Transaction> transactionRecord =
-                        new ProducerRecord<>(HVT_TOPIC, id, transaction);
+                        new ProducerRecord<>(KafkaTopics.HIGH_VALUE_TRANSACTIONS, id, transaction);
 
                 RecordMetadata highvTranMetadata = kafkaProducer.send(transactionRecord).get();
                 logger.info("Record from (key: {}, value: {}) was sent to (partition: {}, offset: {})",
@@ -61,7 +58,7 @@ public class Application {
             // valid transactions
             if (userResidence.equalsIgnoreCase(transaction.getTransactionLocation())) {
                 ProducerRecord<String, Transaction> transactionRecord =
-                        new ProducerRecord<>(VT_TOPIC, id, transaction);
+                        new ProducerRecord<>(KafkaTopics.VALID_TRANSACTIONS, id, transaction);
 
                 RecordMetadata validTranMetadata = kafkaProducer.send(transactionRecord).get();
                 logger.info("Record from (key: {}, value: {}) was sent to (partition: {}, offset: {})",
@@ -70,7 +67,7 @@ public class Application {
             // suspicious transactions
             else {
                 ProducerRecord<String, Transaction> transactionRecord =
-                        new ProducerRecord<>(ST_TOPIC, id, transaction);
+                        new ProducerRecord<>(KafkaTopics.SUSPICIOUS_TRANSACTIONS, id, transaction);
 
                 RecordMetadata suspiciousTranMetadata = kafkaProducer.send(transactionRecord).get();
                 logger.info("Record from (key: {}, value: {}) was sent to (partition: {}, offset: {})",

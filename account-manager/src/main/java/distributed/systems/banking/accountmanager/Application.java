@@ -1,5 +1,7 @@
 package distributed.systems.banking.accountmanager;
 
+import distributed.systems.banking.common.KafkaConfig;
+import distributed.systems.banking.common.KafkaTopics;
 import distributed.systems.banking.common.Transaction;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -18,9 +20,6 @@ public class Application {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
-    private static final String VT_TOPIC = "valid-transactions";
-    private static final String BOOTSTRAP_SERVERS = "localhost:9092, localhost:9093, localhost:9094";
-
     public static void main(String[] args) {
         String consumerGroup = "valid-transactions-group";
         if (args.length == 1) {
@@ -28,8 +27,8 @@ public class Application {
         }
 
         logger.info("Consumer is part of consumer group {}", consumerGroup);
-        Consumer<String, Transaction> kafkaConsumer = createKafkaConsumer(BOOTSTRAP_SERVERS, consumerGroup);
-        consumeMessages(VT_TOPIC, kafkaConsumer);
+        Consumer<String, Transaction> kafkaConsumer = createKafkaConsumer(KafkaConfig.BOOTSTRAP_SERVERS, consumerGroup);
+        consumeMessages(KafkaTopics.VALID_TRANSACTIONS, kafkaConsumer);
     }
 
     public static void consumeMessages(String topic, Consumer<String, Transaction> kafkaConsumer) {
