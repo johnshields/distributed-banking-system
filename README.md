@@ -3,7 +3,7 @@
 A distributed banking system built with Java and Apache Kafka, comprising multiple microservices that process card transactions and detect suspicious activity based on location mismatches.
 Includes services for transaction validation, customer notifications, account management, and reporting, all communicating through Kafka topics with a fault-tolerant multi-broker cluster.
 
-![Architecture](_assets/architecture.png)
+![Architecture](.assets/architecture.png)
 
 ## Services
 
@@ -23,7 +23,7 @@ Fault-tolerant, scalable cluster:
 - `suspicious-transactions`: 2 partitions, replication factor 3
 - `high-value-transactions`
 
-![Kafka Cluster Setup](_assets/screen-grabs/kafka_cluster_setup.png)
+![Kafka Cluster Setup](.assets/screen-grabs/kafka_cluster_setup.png)
 
 ## Running the Project
 

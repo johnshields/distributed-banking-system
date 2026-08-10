@@ -63,18 +63,11 @@ public class Application {
     }
 
     private static void recordTransactionForReporting(String topic, Transaction transaction) {
-        // Print a different message depending on whether transaction is suspicious or valid
-
-        // valid transactions
         if (topic.equalsIgnoreCase("valid-transactions")) {
             logger.info("valid transaction from {}", transaction);
-        }
-        // suspicious transactions
-        else if (topic.equalsIgnoreCase("suspicious-transactions")) {
+        } else if (topic.equalsIgnoreCase("suspicious-transactions")) {
             logger.info("suspicious transaction from {}", transaction);
-        }
-        // high value transactions
-        else if (topic.equalsIgnoreCase("high-value-transactions")) {
+        } else if (topic.equalsIgnoreCase("high-value-transactions")) {
             logger.info("high value transaction from {}", transaction);
         }
     }
